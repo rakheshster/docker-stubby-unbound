@@ -18,4 +18,4 @@ docker run -d \
     --ip="$IP" \
     --network="my_macvlan_network" \
     --restart=unless-stopped \
-    $IMAGE
+    rakheshster/docker-stubby-unbound
