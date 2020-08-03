@@ -1,6 +1,5 @@
-LABEL maintainer="Rakhesh Sasidharan"
-
 ################################### BUILDING STUBBY ####################################
+# This image is to only build Stubby
 FROM alpine:latest AS alpinebuild
 
 ENV GETDNS_VERSION 1.6.0
@@ -9,7 +8,7 @@ ENV STUBBY_VERSION 0.3.0
 # Get the build-dependencies for stubby & getdns
 # See for the official list: https://github.com/getdnsapi/getdns#external-dependencies
 # https://pkgs.alpinelinux.org/packages is a good way to search for alpine packages. Note it uses wildcards
-RUN apk add --no-cache git build-base \ 
+RUN apk add --update --no-cache git build-base \ 
     libtool openssl-dev \
     unbound-dev yaml-dev \
     cmake libidn2-dev libuv-dev libev-dev check-dev \
@@ -29,33 +28,39 @@ RUN cmake -DBUILD_STUBBY=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr/local .. && \
 
 
 ################################### THE FINAL IMAGE ####################################
+# This image contains Unbound, s6, and I copy the Stubby files from above into it.
 FROM alpine:latest
 
+LABEL maintainer="Rakhesh Sasidharan"
 ENV S6_VERSION 2.0.0.1
 
-# Create a user and group to run stubby as (thanks to https://stackoverflow.com/a/49955098 for syntax)
+# Install Unbound (first line) and run-time dependencies for Stubby (I found these by running stubby and what it complained about)
+# Also create a user and group to run stubby & unbound as (thanks to https://stackoverflow.com/a/49955098 for syntax)
 # addgroup / adduser -S creates a system group / user; the -D says don't assign a password
-# Then install the required run-time dependencies (I found these by running stubby and what it complained about)
-RUN addgroup -S stubby && adduser -D -S stubby -G stubby && \
-    apk add --no-cache unbound-libs yaml libidn2 && \
+RUN apk add --update --no-cache unbound ca-certificates \
+    unbound-libs yaml libidn2 && \
+    addgroup -S stubby && adduser -D -S stubby -G stubby && \
+    addgroup -S unbound && adduser -D -S unbound -G unbound && \
     mkdir -p /var/cache/stubby && \
     chown stubby:stubby /var/cache/stubby
 
-# Copy the files from the above image to the new image
-COPY --from=alpinebuild /usr/local/ /usr/local/
+# Copy the files from the above image to the new image (so /usr/local/bin -> /bin etc.)
+COPY --from=alpinebuild /usr/local/ /
 
-# Copy the config file from $(pwd) to the correct location. Stubby looks for a config file there or at /root/.stubby.yml
-COPY stubby.yml /usr/local/etc/stubby/stubby.yml
+# Copy the config files & s6 service files to the correct location
+COPY etc/ /etc/
 
-# Add s6 overlay
+# Add s6 overlay. NOTE: the default instructions give the impression one must do a 2-stage extract. That's only to target this issue - https://github.com/just-containers/s6-overlay#known-issues-and-workarounds
 ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_VERSION}/s6-overlay-amd64.tar.gz /tmp/
-RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude='./bin' && \
-    tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin && \
-    rm  -f /tmp/s6-overlay-amd64.tar.gz
+RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / && \
+    rm  -f /tmp/s6-overlay-amd64.tar.gz && \
+    chmod a+x /etc/service.d/*/run
 
 # s6 overlay doesn't support running as a different user, so am skipping this. I set the stubby service to run under user "stubby" in its service definition though.
 # USER stubby:stubby
-EXPOSE 8053/udp
+# USER unbound:unbound
+
+EXPOSE 8053/udp 53/udp 53/tcp
 
 ENTRYPOINT ["/init"]
 

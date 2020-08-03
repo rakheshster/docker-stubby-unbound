@@ -1,0 +1,6 @@
+#!/usr/bin/execlineb -P
+
+s6-setuidgid unbound
+
+/usr/sbin/unbound-anchor /etc/unbound/root.key
+/usr/sbin/unbound -C /etc/unbound/unbound.conf
