@@ -38,7 +38,7 @@ RUN cmake -DBUILD_STUBBY=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr/local .. && \
 # This image contains Unbound, s6, and I copy the Stubby files from above into it.
 FROM alpine:latest
 
-# I take the arch as an argument. Options are amd64, x86, armhf (for Pi), arm, aarch64. See https://github.com/just-containers/s6-overlay#releases
+# I take the arch (for s6) as an argument. Options are amd64, x86, armhf (for Pi), arm, aarch64. See https://github.com/just-containers/s6-overlay#releases
 ARG ARCH=armhf 
 LABEL maintainer="Rakhesh Sasidharan"
 ENV S6_VERSION 2.0.0.1
