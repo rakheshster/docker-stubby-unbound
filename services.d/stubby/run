@@ -1,0 +1,5 @@
+#!/usr/bin/execlineb -P
+
+s6-setuidgid stubby
+
+/usr/local/bin/stubby -C /usr/local/etc/stubby/stubby.yml
