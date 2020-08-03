@@ -1,8 +1,19 @@
-ARG ARCH=
-
 ################################### BUILDING STUBBY ####################################
 # This image is to only build Stubby
 FROM alpine:latest AS alpinebuild
+
+# I need the arch later on when downloading s6. Rather than doing the check at that later stage, I introduce the ARG here itself so I can quickly validate and fail if needed.
+# Use the --build-arg ARCH=xxx to pass an argument
+ARG ARCH=armhf
+RUN case ${ARCH} in \
+    amd64|x86|armhf|arm|aarch64) \
+        echo "Building for ${ARCH}" \
+        ;; \
+    *) \
+        echo "Incorrect architecture specified. Must be one of: amd64|x86|armhf (for Pi)|arm|aarch64" \
+        exit 1 \
+        ;; \
+    esac 
 
 ENV GETDNS_VERSION 1.6.0
 ENV STUBBY_VERSION 0.3.0
@@ -33,6 +44,8 @@ RUN cmake -DBUILD_STUBBY=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr/local .. && \
 # This image contains Unbound, s6, and I copy the Stubby files from above into it.
 FROM alpine:latest
 
+# I take the arch as an argument. Options are amd64, x86, armhf (for Pi), arm, aarch64. See https://github.com/just-containers/s6-overlay#releases
+ARG ARCH=armhf 
 LABEL maintainer="Rakhesh Sasidharan"
 ENV S6_VERSION 2.0.0.1
 
