@@ -35,12 +35,12 @@ LABEL maintainer="Rakhesh Sasidharan"
 ENV S6_VERSION 2.0.0.1
 
 # Install Unbound (first line) and run-time dependencies for Stubby (I found these by running stubby and what it complained about)
-# Also create a user and group to run stubby & unbound as (thanks to https://stackoverflow.com/a/49955098 for syntax)
+# Also create a user and group to run stubby as (thanks to https://stackoverflow.com/a/49955098 for syntax)
+# Unbound doesn't need a user/ group as the package automatically creates one
 # addgroup / adduser -S creates a system group / user; the -D says don't assign a password
 RUN apk add --update --no-cache unbound ca-certificates \
     unbound-libs yaml libidn2 && \
     addgroup -S stubby && adduser -D -S stubby -G stubby && \
-    addgroup -S unbound && adduser -D -S unbound -G unbound && \
     mkdir -p /var/cache/stubby && \
     chown stubby:stubby /var/cache/stubby
 
@@ -53,8 +53,7 @@ COPY etc/ /etc/
 # Add s6 overlay. NOTE: the default instructions give the impression one must do a 2-stage extract. That's only to target this issue - https://github.com/just-containers/s6-overlay#known-issues-and-workarounds
 ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_VERSION}/s6-overlay-amd64.tar.gz /tmp/
 RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / && \
-    rm  -f /tmp/s6-overlay-amd64.tar.gz && \
-    chmod a+x /etc/service.d/*/run
+    rm  -f /tmp/s6-overlay-amd64.tar.gz
 
 # s6 overlay doesn't support running as a different user, so am skipping this. I set the stubby service to run under user "stubby" in its service definition though.
 # USER stubby:stubby

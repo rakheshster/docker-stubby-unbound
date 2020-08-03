@@ -2,5 +2,5 @@
 
 s6-setuidgid unbound
 
-/usr/sbin/unbound-anchor /etc/unbound/root.key
-/usr/sbin/unbound -C /etc/unbound/unbound.conf
+/usr/sbin/unbound-anchor -a /etc/unbound/root.key
+/usr/sbin/unbound -c /etc/unbound/unbound.conf
