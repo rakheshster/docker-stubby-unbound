@@ -5,7 +5,9 @@ FROM alpine:latest AS alpinebuild
 # I need the arch later on when downloading s6. Rather than doing the check at that later stage, I introduce the ARG here itself so I can quickly validate and fail if needed.
 # Use the --build-arg ARCH=xxx to pass an argument
 ARG ARCH=armhf
-RUN if ! [[ ${ARCH} = "amd64" || ${ARCH} = "x86" || ${ARCH} = "armhf" || ${ARCH} = "arm" || ${ARCH} = "aarch64" ]]; then exit 1; fi
+RUN if ! [[ ${ARCH} = "amd64" || ${ARCH} = "x86" || ${ARCH} = "armhf" || ${ARCH} = "arm" || ${ARCH} = "aarch64" ]]; then \
+    echo "Incorrect architecture specified! Must be one of amd64, x86, armhf (for Pi), arm, aarch64"; exit 1; \
+    fi
 
 ENV GETDNS_VERSION 1.6.0
 ENV STUBBY_VERSION 0.3.0
