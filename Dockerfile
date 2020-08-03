@@ -50,6 +50,7 @@ RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude='./bin' && \
 
 # Credits:
 # 1. Thanks to https://github.com/treibholz/docker-stubby/blob/master/Dockerfile
+# 2. Thanks to https://github.com/MatthewVance/stubby-docker
 
 # Notes:
 # 1. Stubby is developed by the getdns team. libgetdns is a dependancy for Stubby, the getdns library provides all the core functionality for DNS resolution done by Stubby so it is important to build against the latest version of getdns. 
