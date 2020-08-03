@@ -1,6 +1,7 @@
 #!/usr/bin/execlineb -P
 
-s6-setuidgid unbound
-
 /usr/sbin/unbound-anchor -a /etc/unbound/root.key
+
+# switch user
+s6-setuidgid unbound
 /usr/sbin/unbound -c /etc/unbound/unbound.conf
