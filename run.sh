@@ -25,6 +25,7 @@ docker network create -d macvlan \
 docker run -d \
     --name my_stubby-unbound \
     --ip="$IP" \
+    -P \
     --network="$MACVLAN_NETWORK_NAME" \
     --restart=unless-stopped \
     "$IMAGE"

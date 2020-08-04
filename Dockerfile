@@ -48,7 +48,8 @@ ENV S6_VERSION 2.0.0.1
 # Unbound doesn't need a user/ group as the package automatically creates one
 # addgroup / adduser -S creates a system group / user; the -D says don't assign a password
 RUN apk add --update --no-cache unbound ca-certificates \
-    unbound-libs yaml libidn2 && \
+    unbound-libs yaml libidn2 \
+    drill && \
     addgroup -S stubby && adduser -D -S stubby -G stubby && \
     mkdir -p /var/cache/stubby && \
     chown stubby:stubby /var/cache/stubby
@@ -70,8 +71,8 @@ RUN tar xzf /tmp/s6-overlay-${ARCH}.tar.gz -C / && \
 
 EXPOSE 8053/udp 53/udp 53/tcp
 
-# HEALTHCHECK --interval=5s --timeout=3s --start-period=5s \
-#    CMD drill @127.0.0.1 -p 8053 google.com || exit 1
+HEALTHCHECK --interval=5s --timeout=3s --start-period=5s \
+    CMD drill @127.0.0.1 -p 8053 google.com || exit 1
 
 ENTRYPOINT ["/init"]
 
