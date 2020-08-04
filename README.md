@@ -1,4 +1,4 @@
-# Stubby + Unbound Docker image
+# Stubby + Unbound + Docker
 ## What is this?
 This is a Docker image containing Stubby and Unbound. 
 
@@ -21,9 +21,6 @@ This Stubby + Unbound Docker image packages the two together. It sets up Stubby 
 
 ## s6-overlay
 I also took the opportunity to setup an [s6-overlay](https://github.com/just-containers/s6-overlay). I like their philosophy of a Docker container being “one thing” rather than “one process per container”. This is why I chose to create one image for both Stubby & Docker instead of separate images. It was surprisingly easy to setup. 
-
-## Notes
-This is my first Docker image. Thanks to [GitHub - MatthewVance/stubby-docker: Gain the full power of DNS-over-TLS forwarding by combining Stubby with Unbound](https://github.com/MatthewVance/stubby-docker) and [GitHub - treibholz/docker-stubby: minimal alpine-linux based stubby](https://github.com/treibholz/docker-stubby) which I referred to extensively to learn as I go. Any mistakes or inefficiencies in this Docker image are all mine. 
 
 ## Configuring
 The `etc` folder contains a `services.d` folder that holds the service definitions for Stubby and Unbound. Unbound is set to depend on Stubby via a `dependencies` file so they start in the correct order. 
@@ -55,3 +52,6 @@ The quickest way to get started after cloning/ downloading this repo is to use t
 This script builds the image, which involves compiling the stubby sources and installing the unbound package… all of it on an Alpine Linux base with a topping of s6-overlay. There’s probably fancier ways of doing this than a shell script, but this is what suited me. You could skip the script and do a `docker build` too -  the script is just a wrapper to run this command with some checks of the architecture and cleaning up of the intermediate images. 
 
 After the image is built you can run it manually via `docker run` or you use the `./createcontainer.sh` script which takes the image name and container name as mandatory parameters and optionally the IP address and network of the container. I tend to use a macvlan network to run this so the container has its own IP address on my network. This script doesn’t run the container though - no sir! It creates the container and also creates a systemd service unit file along with some instructions on what to do with it. This way you have systemd managing the container so it always starts after a system reboot. :) The unit file and systemd integration is optional of course; I wanted the container to always start after a reboot as it provides DNS for my home lab and is critical, that’s why I went through this extra effort. 
+
+## Notes
+This is my first Docker image. Thanks to [GitHub - MatthewVance/stubby-docker: Gain the full power of DNS-over-TLS forwarding by combining Stubby with Unbound](https://github.com/MatthewVance/stubby-docker) and [GitHub - treibholz/docker-stubby: minimal alpine-linux based stubby](https://github.com/treibholz/docker-stubby) which I referred to extensively to pick up Docker as I went along. Any mistakes or inefficiencies in this Docker image are all mine. 
