@@ -1,8 +1,17 @@
 #!/bin/bash
 
-IP="192.168.17.3"
-SUBNET="192.168.17.0/24"
-GATEWAY="192.168.17.1"
+if [[ $# -ne 4 ]]; then
+    echo "Usage ./run.sh <IP Address> <Subnet> <Gateway> <Image Name>";
+    echo "Example: ./run.sh 192.168.1.23 192.168.1.0/24 192.168.1.1 rakheshster/docker-stubby-unbound:amd64"
+    exit 1
+fi
+
+IP=$1
+SUBNET=$2
+GATEWAY=$2
+IMAGE=$4
+
+MACVLAN_NETWORK_NAME="my_macvlan_network"
 
 # create the macvlan network
 # I call it my_macvlan_network, point it to my subnet and interface
@@ -11,11 +20,11 @@ docker network create -d macvlan \
     --subnet="$SUBNET" \
     --gateway="$GATEWAY" \
     -o parent=eth0 \
-    my_macvlan_network
+    $MACVLAN_NETWORK_NAME
 
 docker run -d \
     --name my_stubby-unbound \
     --ip="$IP" \
-    --network="my_macvlan_network" \
+    --network="$MACVLAN_NETWORK_NAME" \
     --restart=unless-stopped \
-    rakheshster/docker-stubby-unbound
+    "$IMAGE"
