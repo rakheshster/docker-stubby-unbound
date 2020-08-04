@@ -21,6 +21,7 @@ case $1 in
         ;;
     all)
         ARCH=("amd64 x86 armhf arm aarch64")
+	;;
     *)
         echo "Usage ./createimage.sh <arch> [image name]"
         echo "Valid <arch> options are amd64, x86, armhf (for Raspberry Pi), arm, aarch64, all (to create them all)"
@@ -30,7 +31,7 @@ esac
 
 # if no image name, default to something
 if [[ -z $2 ]]; then 
-    IMAGENAME="rakheshster/docker-stubby-unbound"
+    IMAGE="rakheshster/docker-stubby-unbound"
 fi
 
 # loop through the array and create them all
