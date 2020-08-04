@@ -6,7 +6,14 @@ if [[ -z "$1" || -z "$2" ]]; then
     echo "Usage ./createcontainer.sh <image name> <container name> [ip address] [network name]"
     exit 1
 else
-    IMAGE=$1
+    if [[ -z $(docker image ls -q $1) ]]; then
+        # can't find the image, so exit
+        echo "Image $1 does not exist"
+        exit 1
+    else
+        IMAGE=$1
+    fi
+    
     NAME=$2
 fi
 
