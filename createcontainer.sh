@@ -1,11 +1,13 @@
 #!/bin/bash
+# Usage ./createcontainer.sh <image name> <container name> [ip address] [network name]
+
+# if the first or second arguments are missing give a usage message and exit
 if [[ -z "$1" || -z "$2" ]]; then
-    echo "Usage ./createcontainer.sh <image name> <container name> <ip address> <network name>"
+    echo "Usage ./createcontainer.sh <image name> <container name> [ip address] [network name]"
     exit 1
 else
     IMAGE=$1
     NAME=$2
-    echo "$IMAGE $NAME"
 fi
 
 if [[ -z "$4" ]]; then NETWORK="bridge" else NETWORK=$4
