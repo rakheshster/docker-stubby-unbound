@@ -13,7 +13,7 @@ else
     else
         IMAGE=$1
     fi
-    
+
     NAME=$2
 fi
 
@@ -36,7 +36,9 @@ else
     docker create --name "$NAME" --ip="$IP" -P --network="$NETWORK" --restart=unless-stopped "$IMAGE"
 fi
 
-echo "Creating $NAME.service for systemd"
+printf "To start the container do: docker run $NAME"
+
+printf "Creating ${NAME}.service for systemd"
 cat <<EOF > $NAME.service
     [Unit]
     Description=Stubby Unbound Container
@@ -51,3 +53,8 @@ cat <<EOF > $NAME.service
     [Install]
     WantedBy=local.target
 EOF
+
+printf "Do the following to install this in systemd & enable:"
+printf "\tsudo cp ${NAME}.service /etc/systemd/system/"
+printf "\tsudo systemctl enable ${NAME}.service"
+printf "And if you want to start the service: sudo systemctl start ${NAME}.service"
