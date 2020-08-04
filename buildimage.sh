@@ -41,4 +41,4 @@ for A in ${ARCH[@]}; do
 done
 
 # prune the intermediate images
-docker image prune --filter label=stage=alpinebuild
+docker image prune --filter label=stage=alpinebuild -f
