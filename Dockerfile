@@ -5,6 +5,10 @@ FROM alpine:latest AS alpinebuild
 ENV GETDNS_VERSION 1.6.0
 ENV STUBBY_VERSION 0.3.0
 
+# I realized that the build process doesn't remove this intermediate image automatically so best to LABEL it here and then prune later
+# Thanks to https://stackoverflow.com/a/55082473
+LABEL stage=alpinebuild
+
 # I need the arch later on when downloading s6. Rather than doing the check at that later stage, I introduce the ARG here itself so I can quickly validate and fail if needed.
 # Use the --build-arg ARCH=xxx to pass an argument
 ARG ARCH=armhf

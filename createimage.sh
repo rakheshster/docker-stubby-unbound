@@ -39,3 +39,6 @@ for A in ${ARCH[@]}; do
     echo "Building ${IMAGE}:${A}"
     docker build --build-arg ARCH=$A . -t ${IMAGE}:${A}
 done
+
+# prune the intermediate images
+docker image prune --filter label=stage=alpinebuild
