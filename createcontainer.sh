@@ -39,7 +39,7 @@ fi
 # quit if the above step gave any error
 [[ $? -ne 0 ]] && exit 1
 
-printf "\nTo start the container do: \n\tdocker run $NAME"
+printf "\nTo start the container do: \n\tdocker start $NAME"
 
 printf "\n\nCreating ./${NAME}.service for systemd"
 cat <<EOF > $NAME.service
