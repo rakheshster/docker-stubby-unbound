@@ -1,5 +1,6 @@
 #!/bin/bash
 # Usage ./buildimage.sh <arch> [image name]
+# Valid <arch> options are amd64, x86, armhf (for Raspberry Pi), arm, aarch64, all (to create them all)
 
 # validate the arch argument
 case $1 in
