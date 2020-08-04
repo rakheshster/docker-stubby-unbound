@@ -26,10 +26,13 @@ RUN apk add --update --no-cache git build-base \
     && rm -rf /var/cache/apk/*
 
 # Download the source
+# Official recommendation (for example: https://github.com/getdnsapi/getdns/releases/tag/v1.6.0) is to get the tarball from getdns than from GitHub
+# Stubby is developed by the getdns team. libgetdns is a dependancy for Stubby, the getdns library provides all the core functionality for DNS resolution done by Stubby so it is important to build against the latest version of getdns.
+# When building getdns one can also build stubby alongwith
 ADD https://getdnsapi.net/dist/getdns-${GETDNS_VERSION}.tar.gz /tmp/
 
 # Create a workdir called /src, extract the getdns source to that, build it
-# NOTE: This builds both getdns and stubby
+# Cmake steps from https://lektor.getdnsapi.net/quick-start/cmake-quick-start/ (v 1.6.0)
 WORKDIR /src
 RUN tar xzf /tmp/getdns-${GETDNS_VERSION}.tar.gz -C ./
 WORKDIR /src/getdns-${GETDNS_VERSION}/build
@@ -80,10 +83,3 @@ HEALTHCHECK --interval=5s --timeout=3s --start-period=5s \
 
 ENTRYPOINT ["/init"]
 
-# Credits:
-# 1. Thanks to https://github.com/treibholz/docker-stubby/blob/master/Dockerfile
-
-# Notes:
-# 1. Stubby is developed by the getdns team. libgetdns is a dependancy for Stubby, the getdns library provides all the core functionality for DNS resolution done by Stubby so it is important to build against the latest version of getdns. 
-# 2. Official recommendation (for example: https://github.com/getdnsapi/getdns/releases/tag/v1.6.0) is to get the tarball from getdns than from GitHub
-# 3. Cmake steps from https://lektor.getdnsapi.net/quick-start/cmake-quick-start/ (v 1.6.0)
