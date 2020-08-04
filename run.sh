@@ -8,7 +8,7 @@ fi
 
 IP=$1
 SUBNET=$2
-GATEWAY=$2
+GATEWAY=$3
 IMAGE=$4
 
 MACVLAN_NETWORK_NAME="my_macvlan_network"
