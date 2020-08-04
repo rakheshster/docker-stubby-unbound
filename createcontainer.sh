@@ -10,7 +10,17 @@ else
     NAME=$2
 fi
 
-if [[ -z "$4" ]]; then NETWORK="bridge" else NETWORK=$4
+if [[ -z "$4" ]]; then 
+    # network name not specified, default to bridge
+    NETWORK="bridge" 
+elif [[ -z $(docker network ls -f name=$4 -q) ]]; then
+    # network name specified, but we can't find it, so exit
+    echo "Network $4 does not exist"
+    exit 1
+else
+    # passed all validation checks, good to go ahead ...
+    NETWORK=$4
+fi
 
 if [[ -z "$3" ]]; then
     docker create --name "$NAME" -P --network="$NETWORK" --restart=unless-stopped "$IMAGE"
