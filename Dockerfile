@@ -70,8 +70,8 @@ RUN tar xzf /tmp/s6-overlay-${ARCH}.tar.gz -C / && \
 
 EXPOSE 8053/udp 53/udp 53/tcp
 
-# HEALTHCHECK --interval=5s --timeout=3s --start-period=5s \
-#    CMD drill @127.0.0.1 -p 8053 google.com || exit 1
+HEALTHCHECK --interval=5s --timeout=3s --start-period=5s \
+    CMD drill @127.0.0.1 -p 8053 google.com || exit 1
 
 ENTRYPOINT ["/init"]
 
