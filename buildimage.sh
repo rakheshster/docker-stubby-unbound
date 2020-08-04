@@ -1,5 +1,5 @@
 #!/bin/bash
-# Usage ./createimage.sh <arch> [image name]
+# Usage ./buildimage.sh <arch> [image name]
 
 # validate the arch argument
 case $1 in
@@ -23,7 +23,7 @@ case $1 in
         ARCH=("amd64 x86 armhf arm aarch64")
 	;;
     *)
-        echo "Usage ./createimage.sh <arch> [image name]"
+        echo "Usage ./buildimage.sh <arch> [image name]"
         echo "Valid <arch> options are amd64, x86, armhf (for Raspberry Pi), arm, aarch64, all (to create them all)"
         exit 1
         ;;
