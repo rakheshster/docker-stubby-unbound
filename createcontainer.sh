@@ -41,7 +41,7 @@ fi
 
 printf "\nTo start the container do: \n\tdocker run $NAME"
 
-printf "\n\nCreating ${NAME}.service for systemd"
+printf "\n\nCreating ./${NAME}.service for systemd"
 cat <<EOF > $NAME.service
     [Unit]
     Description=Stubby Unbound Container
