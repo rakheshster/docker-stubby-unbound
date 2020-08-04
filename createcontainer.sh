@@ -38,7 +38,7 @@ fi
 
 printf "\nTo start the container do: \n\tdocker run $NAME"
 
-printf "\nCreating ${NAME}.service for systemd"
+printf "\n\nCreating ${NAME}.service for systemd"
 cat <<EOF > $NAME.service
     [Unit]
     Description=Stubby Unbound Container
@@ -54,7 +54,7 @@ cat <<EOF > $NAME.service
     WantedBy=local.target
 EOF
 
-printf "\nDo the following to install this in systemd & enable:"
+printf "\n\nDo the following to install this in systemd & enable:"
 printf "\n\tsudo cp ${NAME}.service /etc/systemd/system/"
 printf "\n\tsudo systemctl enable ${NAME}.service"
-printf "\nAnd if you want to start the service do: \n\tsudo systemctl start ${NAME}.service \n"
+printf "\n\nAnd if you want to start the service do: \n\tsudo systemctl start ${NAME}.service \n"
