@@ -65,7 +65,7 @@ cat <<EOF > $NAME.service
     After=docker.service
 
     [Service]
-    Restart=always
+    Restart=on-abort
     ExecStart=/usr/bin/docker start -a $NAME
     ExecStop=/usr/bin/docker stop -t 2 $NAME
 
