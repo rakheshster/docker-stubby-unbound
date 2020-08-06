@@ -1,13 +1,14 @@
-################################### BUILDING STUBBY ####################################
+################################### STUBBY ####################################
 # This image is to only build Stubby
-FROM alpine:latest AS alpinebuild
+FROM alpine:latest AS alpinestubby
 
 ENV GETDNS_VERSION 1.6.0
 ENV STUBBY_VERSION 0.3.0
 
 # I realized that the build process doesn't remove this intermediate image automatically so best to LABEL it here and then prune later
 # Thanks to https://stackoverflow.com/a/55082473
-LABEL stage=alpinebuild
+LABEL stage="alpinestubby"
+LABEL maintainer="Rakhesh Sasidharan"
 
 # I need the arch later on when downloading s6. Rather than doing the check at that later stage, I introduce the ARG here itself so I can quickly validate and fail if needed.
 # Use the --build-arg ARCH=xxx to pass an argument
@@ -41,14 +42,13 @@ RUN cmake -DBUILD_STUBBY=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr/local .. && \
     make install
 
 
-################################### THE FINAL IMAGE ####################################
-# This image contains Unbound, s6, and I copy the Stubby files from above into it.
-FROM alpine:latest
+################################### UNBOUND ####################################
+# This image is to only install Unbound. I can reuse this image later without have to rebuild the whole image for any small changes. 
+# Basically I am doing a multistage build. https://docs.docker.com/develop/develop-images/multistage-build/
+FROM alpine:latest AS alpineunbound
 
-# I take the arch (for s6) as an argument. Options are amd64, x86, armhf (for Pi), arm, aarch64. See https://github.com/just-containers/s6-overlay#releases
-ARG ARCH=armhf 
+LABEL stage="alpineunbound"
 LABEL maintainer="Rakhesh Sasidharan"
-ENV S6_VERSION 2.0.0.1
 
 # Install Unbound (first line) and run-time dependencies for Stubby (I found these by running stubby and what it complained about)
 # Also create a user and group to run stubby as (thanks to https://stackoverflow.com/a/49955098 for syntax)
@@ -61,8 +61,18 @@ RUN apk add --update --no-cache unbound ca-certificates \
     mkdir -p /var/cache/stubby && \
     chown stubby:stubby /var/cache/stubby
 
-# Copy the files from the above image to the new image (so /usr/local/bin -> /bin etc.)
-COPY --from=alpinebuild /usr/local/ /
+################################### S6 & FINALIZE ####################################
+# This pulls in Unbound & Stubby, adds s6 and copies some files over
+# Create a new image based on alpinebound ...
+FROM alpineunbound
+
+# ... and copy the files from the alpinestubby image to the new image (so /usr/local/bin -> /bin etc.)
+COPY --from=alpinestubby /usr/local/ /
+
+# I take the arch (for s6) as an argument. Options are amd64, x86, armhf (for Pi), arm, aarch64. See https://github.com/just-containers/s6-overlay#releases
+ARG ARCH=armhf 
+LABEL maintainer="Rakhesh Sasidharan"
+ENV S6_VERSION 2.0.0.1
 
 # Copy the config files & s6 service files to the correct location
 COPY root/ /
