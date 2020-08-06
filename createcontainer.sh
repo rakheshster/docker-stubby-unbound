@@ -33,7 +33,7 @@ if [[ -z "$3" ]]; then
     docker create --name "$NAME" \
         -P --network="$NETWORK" \
         --restart=unless-stopped \
-        --mount type=bind,source=$(pwd)/etc/unbound.d,target=/etc/unbound.d \
+        --mount type=bind,source=$(pwd)/root/etc/unbound.d,target=/etc/unbound.d \
         "$IMAGE"
 else
     IP=$3
@@ -41,7 +41,7 @@ else
         --ip="$IP" -P \
         --network="$NETWORK" \
         --restart=unless-stopped \
-        --mount type=bind,source=$(pwd)/etc/unbound.d,target=/etc/unbound.d \
+        --mount type=bind,source=$(pwd)/root/etc/unbound.d,target=/etc/unbound.d \
         "$IMAGE"
 fi
 # Note that when creating the container I map the /etc/unbound.d folder into the container. 
