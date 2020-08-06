@@ -62,7 +62,7 @@ docker exec -it pi1_docker-stubby-unbound vi /etc/unbound.d/somefile.conf
 
 Or you copy a file from outside the container to it:
 ```
-docker cp somefile.conf pi1_docker-stubby-dnsmasq:/etc/unbound.d/
+docker cp somefile.conf pi1_docker-stubby-unbound:/etc/unbound.d/
 ```
 
 After making changes reload unload so it pulls in this config. The `/usr/sbin/unbound-reload` script does that. Run it thus:
