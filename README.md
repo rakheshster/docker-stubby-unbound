@@ -22,10 +22,57 @@ This Stubby + Unbound Docker image packages the two together. It sets up Stubby 
 ## s6-overlay
 I also took the opportunity to setup an [s6-overlay](https://github.com/just-containers/s6-overlay). I like their philosophy of a Docker container being “one thing” rather than “one process per container”. This is why I chose to create one image for both Stubby & Docker instead of separate images. It was surprisingly easy to setup. 
 
-## Configuring
-The `etc` folder contains a `services.d` folder that holds the service definitions for Stubby and Unbound. Unbound is set to depend on Stubby via a `dependencies` file so they start in the correct order. 
+The `etc` folder contains a `services.d` folder that holds the service definitions for Stubby and Unbound. Unbound is set to depend on Stubby via a `dependencies` file so they start in the correct order. The config files and service definitions are intentionally set to run Stubby and Unbound in the foreground. That’s because s6 expects them to run in the foreground. Moreover, each service runs under a separate non-root user account. 
 
-The `etc` folder also contains `stubby` and `unbound`  folders. The former contains the `stubby.yml` config file for Stubby, which you can use as except for modifying this bit with the DNS-over-TLS servers of your choice:
+
+## Configuring
+The `root` folder has the following structure. 
+
+```
+root
+├── etc
+│   ├── services.d
+│   │   ├── stubby
+│   │   │   └── run
+│   │   └── unbound
+│   │       ├── dependencies
+│   │       └── run
+│   ├── stubby
+│   │   ├── stubby.orig.yml
+│   │   └── stubby.yml
+│   ├── unbound
+│   │   └── unbound.conf
+│   └── unbound.d
+│       ├── README.txt
+│       └── unbound.conf.orig
+└── usr
+    └── sbin
+        └── unbound-reload
+```
+
+### Unbound
+The `unbound.d` folder is of interest if you want to tweak the Unbound config or add zones etc. All it currently has is a README file and the original unbound.conf. When the image is built the contents of this folder are copied into it, but during runtime a new docker volume and mapped to this location *within the container*. Since the new docker volume is empty upon creation, the first time the container is run the contents of `/etc/unbound.d` are copied from the container to this volume. If you then make any changes to this folder from within the container it will be stored in the docker volume. 
+
+Unbound is set to pull in any files ending with `*.conf` from this folder into the running config. 
+
+You can edit the file via `docker exec` like thus: 
+```
+docker exec -it pi1_docker-stubby-unbound vi /etc/unbound.d/somefile.conf
+```
+
+Or you copy a file from outside the container to it:
+```
+docker cp somefile.conf pi1_docker-stubby-dnsmasq:/etc/unbound.d/
+```
+
+After making changes reload unload so it pulls in this config. The `/usr/sbin/unbound-reload` script does that. Run it thus:
+```
+docker exec pi1_docker-stubby-unbound unbound-reload
+```
+
+### Stubby
+Stubby doesn't need any configuring but it would be a good idea to change the upstream DNS servers after downloading this repo and before building the image. The `root/etc/stubby/stubby.yml` has this section with my preferred upstream servers:
+
 ```yaml
 ########################## [THIS NEEDS CHANGING]  ##############################
 # These are the NextDNS servers with my configuration. Please modify or use one of the commented upstreams below. 
@@ -41,10 +88,6 @@ upstream_recursive_servers:
     tls_auth_name: “acfd47.dns2.nextdns.io”
 ########################## [THIS NEEDS CHANGING]  ##############################
 ```
-
-Unbound doesn’t need any tweaking, but you could create a `myzones` folder in the `unbound` folder and add additional config files ending with `.conf`. These will be pulled into the main config. This is where you can define your local zones etc. 
-
-The config files and service definitions are intentionally set to run Stubby and Unbound in the foreground. That’s because s6 expects them to run in the foreground. Moreover, each service runs under a separate non-root user account. 
 
 ## Building & Running
 The quickest way to get started after cloning/ downloading this repo is to use the `./buildimage.sh` file. It takes two arguments - the architecture you are building for, and the name you want to give the image (this is optional, defaults to `rakheshster/docker-stubby-unbound`). The architecture matters because the s6 binaries are per architecture. 

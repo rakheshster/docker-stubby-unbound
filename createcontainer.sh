@@ -17,6 +17,10 @@ else
     NAME=$2
 fi
 
+# create a docker volume for storing data. this is automatically named after the container plus a suffix. 
+VOLUME=${NAME}-data
+docker volume create $VOLUME
+
 if [[ -z "$4" ]]; then 
     # network name not specified, default to bridge
     NETWORK="bridge" 
@@ -33,7 +37,7 @@ if [[ -z "$3" ]]; then
     docker create --name "$NAME" \
         -P --network="$NETWORK" \
         --restart=unless-stopped \
-        --mount type=bind,source=$(pwd)/root/etc/unbound.d,target=/etc/unbound.d \
+        --mount type=volume,source=$VOLUME,target=/etc/unbound.d \
         "$IMAGE"
 else
     IP=$3
@@ -41,11 +45,12 @@ else
         --ip="$IP" -P \
         --network="$NETWORK" \
         --restart=unless-stopped \
-        --mount type=bind,source=$(pwd)/root/etc/unbound.d,target=/etc/unbound.d \
+        --mount type=volume,source=$VOLUME,target=/etc/unbound.d \
         "$IMAGE"
 fi
-# Note that when creating the container I map the /etc/unbound.d folder into the container. 
-# The image already has the contents of this folder copied over, but this way I can make any changes and restart the container to pick up changes.
+# Note that the container already has a /etc/unbound.d folder which contains files copied in during the image build.
+# When I create the docker volume above and map it to the container, if this volume is empty the files from within the container are copied over to it.
+# Subsequently the files from the volume are used in preference to the files in the image. 
 
 # quit if the above step gave any error
 [[ $? -ne 0 ]] && exit 1
