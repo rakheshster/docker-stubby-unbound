@@ -51,7 +51,7 @@ root
 ```
 
 ### Unbound
-The `unbound.d` folder is of interest if you want to tweak the Unbound config or add zones etc. All it currently has is a README file and the original unbound.conf. When the image is built the contents of this folder are copied into it, but during runtime a new docker volume and mapped to this location *within the container*. Since the new docker volume is empty upon creation, the first time the container is run the contents of `/etc/unbound.d` are copied from the container to this volume. If you then make any changes to this folder from within the container it will be stored in the docker volume. 
+The `unbound.d` folder is of interest if you want to tweak the Unbound config or add zones etc. All it currently has is a README file and the original `unbound.conf`. When the image is built the contents of this folder are copied into it, but during runtime a new docker volume and mapped to this location *within the container*. Since the new docker volume is empty upon creation, the first time the container is run the contents of `/etc/unbound.d` are copied from the container to this volume. If you then make any changes to this folder from within the container it will be stored in the docker volume. 
 
 Unbound is set to pull in any files ending with `*.conf` from this folder into the running config. 
 
