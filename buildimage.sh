@@ -36,7 +36,8 @@ if [[ -z $2 ]]; then
 fi
 
 # delete an existing image of the same name if it exists
-if [[ $(docker image ls $IMAGE) ]]; then 
+# thanks to https://stackoverflow.com/questions/30543409/how-to-check-if-a-docker-image-with-a-specific-tag-exist-locally
+if [[ $(docker image inspect ${IMAGE}:${ARCH} 2>/dev/null) == "" ]]; then 
     docker rmi -f ${IMAGE}:${ARCH}
 fi
 
