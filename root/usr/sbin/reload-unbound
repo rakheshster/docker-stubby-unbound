@@ -1,0 +1,3 @@
+#!/bin/sh
+
+unbound-control -c /etc/unbound/unbound.conf reload

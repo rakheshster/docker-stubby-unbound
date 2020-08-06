@@ -30,11 +30,22 @@ else
 fi
 
 if [[ -z "$3" ]]; then
-    docker create --name "$NAME" -P --network="$NETWORK" --restart=unless-stopped "$IMAGE"
+    docker create --name "$NAME" \
+        -P --network="$NETWORK" \
+        --restart=unless-stopped \
+        --mount type=bind,source=$(pwd)/etc/unbound.d,target=/etc/unbound.d \
+        "$IMAGE"
 else
     IP=$3
-    docker create --name "$NAME" --ip="$IP" -P --network="$NETWORK" --restart=unless-stopped "$IMAGE"
+    docker create --name "$NAME" \
+        --ip="$IP" -P \
+        --network="$NETWORK" \
+        --restart=unless-stopped \
+        --mount type=bind,source=$(pwd)/etc/unbound.d,target=/etc/unbound.d \
+        "$IMAGE"
 fi
+# Note that when creating the container I map the /etc/dnsmasq.d folder into the container. 
+# The image already has the contents of this folder copied over, but this way I can make any changes and restart the container or reload dnsmasq to pick up changes.
 
 # quit if the above step gave any error
 [[ $? -ne 0 ]] && exit 1

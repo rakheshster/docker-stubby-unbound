@@ -65,16 +65,15 @@ RUN apk add --update --no-cache unbound ca-certificates \
 COPY --from=alpinebuild /usr/local/ /
 
 # Copy the config files & s6 service files to the correct location
-COPY etc/ /etc/
+COPY root/ /
 
 # Add s6 overlay. NOTE: the default instructions give the impression one must do a 2-stage extract. That's only to target this issue - https://github.com/just-containers/s6-overlay#known-issues-and-workarounds
 ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_VERSION}/s6-overlay-${ARCH}.tar.gz /tmp/
 RUN tar xzf /tmp/s6-overlay-${ARCH}.tar.gz -C / && \
     rm  -f /tmp/s6-overlay-${ARCH}.tar.gz
 
-# s6 overlay doesn't support running as a different user, so am skipping this. I set the stubby service to run under user "stubby" in its service definition though.
-# USER stubby:stubby
-# USER unbound:unbound
+# NOTE: s6 overlay doesn't support running as a different user, but I set the stubby service to run under user "stubby" in its service definition.
+# Similarly Unbound runs under its own user & group via the config file. 
 
 EXPOSE 8053/udp 53/udp 53/tcp
 
