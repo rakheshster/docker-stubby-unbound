@@ -37,7 +37,7 @@ fi
 
 # delete an existing image of the same name if it exists
 if [[ $(docker image ls $IMAGE) ]]; then 
-    docker rmi -f $IMAGE 
+    docker rmi -f ${IMAGE}:${ARCH}
 fi
 
 # loop through the array and create them all
