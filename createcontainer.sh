@@ -18,8 +18,8 @@ else
 fi
 
 # create a docker volume for storing data. this is automatically named after the container plus a suffix. 
-UNBOUND_DATA=${NAME}-unbound && docker volume create $UNBOUND_DATA
-STUBBY_DATA=${NAME}-stubby && docker volume create $STUBBY_DATA
+UNBOUND_DATA=${NAME}_unbounddata && docker volume create $UNBOUND_DATA
+STUBBY_DATA=${NAME}_stubbydata && docker volume create $STUBBY_DATA
 
 if [[ -z "$4" ]]; then 
     # network name not specified, default to bridge
