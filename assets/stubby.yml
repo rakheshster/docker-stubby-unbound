@@ -193,8 +193,7 @@ appdata_dir: "/var/cache/stubby"
 # 2) Change to tls_authentication: GETDNS_AUTHENTICATION_NONE
 # 3) Remove all the upstream_recursive_servers listed below
 
-########################## [THIS NEEDS CHANGING]  ##############################
-# These are the NextDNS servers with my configuration. Please modify or use one of the commented upstreams below. 
+# These are the NextDNS servers with my configuration. 
 upstream_recursive_servers:
   - address_data: 45.90.28.0
     tls_auth_name: "acfd47.dns1.nextdns.io"
@@ -204,7 +203,6 @@ upstream_recursive_servers:
     tls_auth_name: "acfd47.dns2.nextdns.io"
   - address_data: 2a07:a8c1::0
     tls_auth_name: "acfd47.dns2.nextdns.io"
-########################## [THIS NEEDS CHANGING]  ##############################
 
 #    upstream_recursive_servers:
 ############################ DEFAULT UPSTREAMS  ################################
