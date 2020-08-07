@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# restart stubby
+s6-svc -r /var/run/s6/services/stubby
