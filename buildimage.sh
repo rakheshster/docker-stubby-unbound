@@ -32,7 +32,7 @@ esac
 
 # if no image name, default to something
 if [[ -z $2 ]]; then 
-    IMAGE="rakheshster/docker-stubby-unbound"
+    IMAGE="rakheshster/stubby-unbound"
 fi
 
 # delete an existing image of the same name if it exists
