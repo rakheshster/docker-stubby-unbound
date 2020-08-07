@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Usage ./createmacvlan.sh <subnet> <gateway> <interface> [network name]
 
 # This is just a script for me to quickly create a macvlan network.
