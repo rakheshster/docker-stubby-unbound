@@ -1,0 +1,1 @@
+* stubby.yml is configured with my NextDNS upstream. I copy this over to my running container to override the defaults. I wanted the container to work out of the box with generic privacy DNS servers, which is why I go this route to separating my config preferences out. 
