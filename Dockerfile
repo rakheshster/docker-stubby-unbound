@@ -74,7 +74,7 @@ FROM alpine:latest AS alpineruntime
 # stubby (found via running it): yaml libidn2
 RUN apk add --update --no-cache ca-certificates \
     yaml libidn2 \
-    drill &&
+    drill
 RUN rm -rf /var/cache/apk/*
 
 # Copy the Stubby & Unbound items from the previous builds into this
