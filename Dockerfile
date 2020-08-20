@@ -99,6 +99,7 @@ ENV S6_VERSION 2.0.0.1
 
 # Copy the config files & s6 service files to the correct location
 COPY root/ /
+ADD https://www.internic.net/domain/named.cache /etc/unbound/root.hints
 
 # Add s6 overlay. NOTE: the default instructions give the impression one must do a 2-stage extract. That's only to target this issue - https://github.com/just-containers/s6-overlay#known-issues-and-workarounds
 ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_VERSION}/s6-overlay-${ARCH}.tar.gz /tmp/

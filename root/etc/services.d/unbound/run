@@ -3,4 +3,4 @@
 # not needed as unbound.conf is set to drop rights after launc (plus this fails if I change UID here coz it can't bind to port 53)
 # s6-setuidgid unbound
 
-/usr/sbin/unbound -c /etc/unbound/unbound.conf
+/sbin/unbound -c /etc/unbound/unbound.conf
