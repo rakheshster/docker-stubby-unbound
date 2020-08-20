@@ -17,11 +17,12 @@ RUN if ! [[ ${ARCH} = "amd64" || ${ARCH} = "x86" || ${ARCH} = "armhf" || ${ARCH}
 
 # Get the build-dependencies for everything I plan on building later
 # common stuff: git build-base libtool xz cmake
+# unbound: expat-dev
 # stubby/ getdns: (https://github.com/getdnsapi/getdns#external-dependencies) openssl-dev yaml-dev
 # unbound: expat-dev
 RUN apk add --update --no-cache \
     git build-base libtool xz cmake \
-    openssl-dev yaml-dev \
+    openssl-dev yaml-dev libidn2-dev libuv-dev libev-dev check-dev \
     expat-dev
 RUN rm -rf /var/cache/apk/*
 
