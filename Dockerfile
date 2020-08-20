@@ -37,6 +37,7 @@ LABEL maintainer="Rakhesh Sasidharan"
 ADD https://nlnetlabs.nl/downloads/unbound/unbound-${UNBOUND_VERSION}.tar.gz /tmp/
 WORKDIR /src
 RUN tar xzf /tmp/unbound-${UNBOUND_VERSION}.tar.gz -C ./
+WORKDIR /src/unbound-${UNBOUND_VERSION}
 # Configure to expect everything in / (--prefix=/) but when installing put everything into /usr/local (via DESTDIR=) (I copy the contents of this to / in the final image)
 RUN ./configure --prefix=/ 
 RUN make && DESTDIR=/usr/local make install
