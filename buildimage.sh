@@ -5,7 +5,8 @@
 # validate the arch argument
 case $1 in
     amd64)
-        # create an array with the arch name. this is useful later on for the "all" case.
+        # create an array with the arch name. 
+	# note: I had some other plans earlier on, hence the decision to create an array. now I don't really need an array but I am going to leave things as they are. 
         ARCH=("amd64")
         ;;
     x86)
@@ -20,9 +21,6 @@ case $1 in
     aarch64)
         ARCH=("aarch64")
         ;;
-    all)
-        ARCH=("amd64 x86 armhf arm aarch64")
-	;;
     *)
         echo "Usage ./buildimage.sh <arch> [image name]"
         echo "Valid <arch> options are amd64, x86, armhf (for Raspberry Pi), arm, aarch64, all (to create them all; does not work currently)"
@@ -43,7 +41,8 @@ fi
 
 # loop through the array and create them all
 for A in ${ARCH[@]}; do
-    echo "This does not work yet. Figure out how to buildx this. "
+    echo "Building ${IMAGE}:${A}"
+    docker build --build-arg ARCH=$A . -t ${IMAGE}
 done
 
 # prune the intermediate images
