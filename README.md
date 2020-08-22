@@ -1,12 +1,12 @@
 # Stubby + Unbound + Docker
 ## Version
-This is v0.2.0 of this image. It contains:
+It's best to target a specific release if you are pulling this image. Currently we are at v0.2.0 and it contains the following:
   * Alpine 3.12
   * Stubby 0.3.0 & GetDNS 1.6.0
   * Unbound 1.11.0
   * s6 2.0.0.1
 
-I had a v0.1 pushed to GitHub before I started thinking about how to properly version these. In the vein of [Semantic Versioning](https://semver.org) the version number is MAJOR.MINOR.PATCH and currently at the number above. 
+I had a v0.1 pushed to GitHub before I started thinking about how to properly version these. In the vein of [Semantic Versioning](https://semver.org) the version number starting with v0.2.0 of this image is MAJOR.MINOR.PATCH and currently at the number above. 
 
 I will update PATCH when I make any changes to the Dockerfile or config files etc. These will be minor behind the scene changes introduced by me. 
 
@@ -20,7 +20,7 @@ This is a Docker image containing Stubby and Unbound.
 From the [Stubby documentation](https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Daemon+-+Stubby):
 > Stubby is an application that acts as a local DNS Privacy stub resolver (using DNS-over-TLS). Stubby encrypts DNS queries sent from a client machine (desktop or laptop) to a DNS Privacy resolver increasing end user privacy.
 
-As of version 0.3 Stubby also supports DNS-over-HTTPs. This Docker image contains version 0.3. 
+As of version 0.3 Stubby also supports DNS-over-HTTPs.
 
 From the [Unbound documentation](https://nlnetlabs.nl/projects/unbound/about/):
 > Unbound is a validating, recursive, caching DNS resolver. It is designed to be fast and lean and incorporates modern features based on open standards. To help increase online privacy, Unbound supports DNS-over-TLS which allows clients to encrypt their communication. 
