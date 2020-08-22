@@ -25,7 +25,7 @@ case $1 in
 	;;
     *)
         echo "Usage ./buildimage.sh <arch> [image name]"
-        echo "Valid <arch> options are amd64, x86, armhf (for Raspberry Pi), arm, aarch64, all (to create them all)"
+        echo "Valid <arch> options are amd64, x86, armhf (for Raspberry Pi), arm, aarch64, all (to create them all; does not work currently)"
         exit 1
         ;;
 esac
@@ -37,14 +37,13 @@ fi
 
 # delete an existing image of the same name if it exists
 # thanks to https://stackoverflow.com/questions/30543409/how-to-check-if-a-docker-image-with-a-specific-tag-exist-locally
-if [[ $(docker image inspect ${IMAGE}:${ARCH} 2>/dev/null) == "" ]]; then 
-    docker rmi -f ${IMAGE}:${ARCH}
+if [[ $(docker image inspect ${IMAGE} 2>/dev/null) == "" ]]; then 
+    docker rmi -f ${IMAGE}
 fi
 
 # loop through the array and create them all
 for A in ${ARCH[@]}; do
-    echo "Building ${IMAGE}:${A}"
-    docker build --build-arg ARCH=$A . -t ${IMAGE}:${A}
+    echo "This does not work yet. Figure out how to buildx this. "
 done
 
 # prune the intermediate images
