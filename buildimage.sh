@@ -23,7 +23,7 @@ case $1 in
         ;;
     *)
         echo "Usage ./buildimage.sh <arch> [image name]"
-        echo "Valid <arch> options are amd64, x86, armhf (for Raspberry Pi), arm, aarch64, all (to create them all; does not work currently)"
+        echo "Valid <arch> options are amd64, x86, armhf (for Raspberry Pi), arm, aarch64"
         exit 1
         ;;
 esac
