@@ -1,18 +1,16 @@
 # Stubby + Unbound + Docker
 ## Version
-It's best to target a specific release if you are pulling this image. Currently we are at v0.2.0 and it contains the following:
+It's best to target a specific release if you are pulling this image. Currently we are at v0.2.0 and it contain the following:
   * Alpine 3.12
   * Stubby 0.3.0 & GetDNS 1.6.0
   * Unbound 1.11.0
   * s6 2.0.0.1
 
-I had a v0.1 pushed to GitHub before I started thinking about how to properly version these. In the vein of [Semantic Versioning](https://semver.org) the version number starting with v0.2.0 of this image is MAJOR.MINOR.PATCH and currently at the number above. 
+I had a v0.1 pushed to GitHub before I started thinking about how to properly version these. In the vein of [Semantic Versioning](https://semver.org) the version numbers starting with v0.2.0 of this image is in a MAJOR.MINOR.PATCH format and currently at the number above. 
 
-I will update PATCH when I make any changes to the Dockerfile or config files etc. These will be minor behind the scene changes introduced by me. 
-
-I will update MINOR in case of any minor updates to any of the software above. For example: Stubby 0.3.1 will be a minor update. 
-
-And I will update MAJOR in case of major updates to any of the software above. For example: Unbound 1.12 or Alpine 3.xx would be a major update. 
+  * I will update PATCH when I make any changes to the Dockerfile or config files etc. These will be minor behind the scene changes introduced by me. 
+  * I will update MINOR in case of any minor updates to any of the software above. For example: Stubby 0.3.1 will be a minor update. 
+  * And I will update MAJOR in case of major updates to any of the software above. For example: Unbound 1.12 or Alpine 3.xx would be a major update. 
 
 ## What is this?
 This is a Docker image containing Stubby and Unbound. 
