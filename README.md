@@ -71,23 +71,23 @@ Unbound is set to pull in any files ending with `*.conf` from this folder into t
 
 You can edit the file via `docker exec` like thus: 
 ```
-docker exec -it pi1_docker-stubby-unbound vi /etc/unbound.d/somefile.conf
+docker exec -it stubby-unbound vi /etc/unbound.d/somefile.conf
 ```
 
 Or you copy a file from outside the container to it:
 ```
-docker cp somefile.conf pi1_docker-stubby-unbound:/etc/unbound.d/
+docker cp somefile.conf stubby-unbound:/etc/unbound.d/
 ```
 
 After making changes reload unload so it pulls in this config. The `/usr/sbin/unbound-reload` script does that. Run it thus:
 ```
-docker exec pi1_docker-stubby-unbound unbound-reload
+docker exec stubby-unbound unbound-reload
 ```
 
 ### Stubby
 Stubby doesn't need any configuring but it would be a good idea to change the upstream DNS servers after downloading this repo and before building the image. 
 
-When the image is built the `stubby` folder is copied into it at `/etc/stubby`, but during runtime a new docker volume is created and mapped to this location within the container (similar to what I do above). Since this volume is empty the first time, the contents of `/etc/stubby` are copied over to this docker volume but any subsequent changes its contents are stored in the docker volume. 
+When the image is built the `stubby` folder is copied into it as `/etc/stubby`, but during runtime a new docker volume is created and mapped to this location within the container (similar to what I do above). Since this volume is empty the first time, the contents of `/etc/stubby` are copied over to this docker volume but any subsequent changes its contents are stored in the docker volume. 
 
 You can edit the config file or copy from outside the container using similar commands as above. 
 
