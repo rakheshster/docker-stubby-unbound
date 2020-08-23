@@ -15,7 +15,6 @@ LABEL maintainer="Rakhesh Sasidharan"
 
 # Get the build-dependencies for everything I plan on building later
 # common stuff: git build-base libtool xz cmake
-# unbound: expat-dev
 # stubby/ getdns: (https://github.com/getdnsapi/getdns#external-dependencies) openssl-dev yaml-dev
 # unbound: expat-dev
 RUN apk add --update --no-cache \
