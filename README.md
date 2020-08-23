@@ -1,10 +1,9 @@
 # Stubby + Unbound + Docker
 ## Version
-It's best to target a specific release if you are pulling this image. Currently we are at v0.2.0 and it contain the following:
-  * Alpine 3.12
+It's best to target a specific release if you are pulling this image. Currently we are at v0.2.1 and it contain the following:
+  * Alpine 3.12 & s6-overlay 2.0.0.1 (via my [alpine-s6](https://hub.docker.com/repository/docker/rakheshster/alpine-s6) image)
   * Stubby 0.3.0 & GetDNS 1.6.0
   * Unbound 1.11.0
-  * s6 2.0.0.1
 
 I had a v0.1 pushed to GitHub before I started thinking about how to properly version these. In the vein of [Semantic Versioning](https://semver.org) the version numbers starting with v0.2.0 of this image is in a MAJOR.MINOR.PATCH format and currently at the number above. 
 
@@ -91,9 +90,9 @@ When the image is built the `stubby` folder is copied into it at `/etc/stubby`, 
 You can edit the config file or copy from outside the container using similar commands as above. 
 
 ## Building & Running
-The quickest way to get started after cloning/ downloading this repo is to use the `./buildimage.sh` file. It takes two arguments - the architecture you are building for, and the name you want to give the image (this is optional, defaults to `rakheshster/docker-stubby-unbound`). The architecture matters because the s6 binaries are per architecture. 
+The quickest way to get started after cloning/ downloading this repo is to use the `./buildlocal.sh` file. It takes a single optional argument - the name you want to give the image (defaults to `rakheshster/stubby-unbound`).
 
-This script builds the image, which involves compiling the stubby sources and installing the unbound package… all of it on an Alpine Linux base with a topping of s6-overlay. There’s probably fancier ways of doing this than a shell script, but this is what suited me. You could skip the script and do a `docker build` too -  the script is just a wrapper to run this command with some checks of the architecture and cleaning up of the intermediate images. 
+NOTE: the script is optional. You can build this via `docker build` too. And additional script `./buildandpush.sh` is what I use to create multi-arch images and push to Docker Hub. It too is optional. 
 
 After the image is built you can run it manually via `docker run` or you use the `./createcontainer.sh` script which takes the image name and container name as mandatory parameters and optionally the IP address and network of the container. I tend to use a macvlan network to run this so the container has its own IP address on my network. 
 

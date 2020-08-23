@@ -1,19 +1,17 @@
+# I am pulling in my alpine-s6 image as the base here so I can reuse it for the common buildimage and later in the runtime. 
+# Initially I used to pull this separately at each stage but that gave errors with docker buildx for the BASE_VERSION argument.
+ARG BASE_VERSION=3.12-2.0.0.1
+FROM rakheshster/alpine-s6:${BASE_VERSION} AS mybase
+
 ################################### COMMON BUILDIMAGE ####################################
 # This image is to be a base where all the build dependencies are installed. 
 # I can use this in the subsequent stages to build stuff
-FROM alpine:3.12 AS alpinebuild
+FROM mybase AS alpinebuild
 
 # I realized that the build process doesn't remove this intermediate image automatically so best to LABEL it here and then prune later
 # Thanks to https://stackoverflow.com/a/55082473
 LABEL stage="alpinebuild"
 LABEL maintainer="Rakhesh Sasidharan"
-
-# I need the arch later on when downloading s6. Rather than doing the check at that later stage, I introduce the ARG here itself so I can quickly validate and fail if needed.
-# Use the --build-arg ARCH=xxx to pass an argument
-ARG ARCH=armhf
-RUN if ! [[ ${ARCH} = "amd64" || ${ARCH} = "x86" || ${ARCH} = "armhf" || ${ARCH} = "arm" || ${ARCH} = "aarch64" ]]; then \
-    echo "Incorrect architecture specified! Must be one of amd64, x86, armhf (for Pi), arm, aarch64"; exit 1; \
-    fi
 
 # Get the build-dependencies for everything I plan on building later
 # common stuff: git build-base libtool xz cmake
@@ -68,7 +66,7 @@ RUN cmake -DBUILD_STUBBY=ON -DCMAKE_INSTALL_PREFIX:PATH=/ ..
 RUN make && DESTDIR=/usr/local make install
 
 ################################### RUNTIME ENVIRONMENT FOR UNBOUND & STUBBY ####################################
-FROM alpine:latest AS alpineruntime
+FROM mybase AS alpineruntime
 
 # Get the runtimes deps for all
 # stubby (found via running it): yaml libidn2
@@ -87,24 +85,16 @@ RUN addgroup -S stubby && adduser -D -S stubby -G stubby
 RUN mkdir -p /var/cache/stubby
 RUN chown stubby:stubby /var/cache/stubby
 
-################################### S6 & FINALIZE ####################################
-# This pulls in Unbound & Stubby, adds s6 and copies some files over
-# Create a new image based on alpinebound ...
+################################### FINALIZE ####################################
+# This pulls in Unbound & Stubby and copies some files over
+# Create a new image based on the previous one ...
 FROM alpineruntime
 
-# I take the arch (for s6) as an argument. Options are amd64, x86, armhf (for Pi), arm, aarch64. See https://github.com/just-containers/s6-overlay#releases
-ARG ARCH=armhf 
 LABEL maintainer="Rakhesh Sasidharan"
-ENV S6_VERSION 2.0.0.1
 
 # Copy the config files & s6 service files to the correct location
 COPY root/ /
 ADD https://www.internic.net/domain/named.cache /etc/unbound/root.hints
-
-# Add s6 overlay. NOTE: the default instructions give the impression one must do a 2-stage extract. That's only to target this issue - https://github.com/just-containers/s6-overlay#known-issues-and-workarounds
-ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_VERSION}/s6-overlay-${ARCH}.tar.gz /tmp/
-RUN tar xzf /tmp/s6-overlay-${ARCH}.tar.gz -C / && \
-    rm  -f /tmp/s6-overlay-${ARCH}.tar.gz
 
 # NOTE: s6 overlay doesn't support running as a different user, but I set the stubby service to run under user "stubby" in its service definition.
 # Similarly Unbound runs under its own user & group via the config file. 
