@@ -15,7 +15,9 @@ jobs:
   buildx:
     runs-on: ubuntu-latest
     env: 
-      # These variables are automatically created by GitHub actions (INPUT_xxx)
+      # Variable format for workflow_dipatch https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/
+      IMAGENAME: ${{ github.event.inputs.imagename }}
+      VERSION: ${{ github.event.inputs.version }}
       PLATFORMS: "linux/amd64,linux/386,linux/arm/v7,linux/arm/v6"
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}  
@@ -32,9 +34,6 @@ jobs:
 
       - name: Docker Buildx (build)
         run: |
-          IMAGENAME=${{ inputs.imagename }}
-          VERSION=${{ inputs.version }}
-
           docker buildx build --platform $PLATFORMS --output "type=image,push=false" . --tag ${IMAGENAME}-${VERSION}
       -
         name: Login to Docker Hub
@@ -47,13 +46,9 @@ jobs:
         name: Docker Buildx (push)
         if: success() && github.event_name != 'pull_request'
         run: |
-          IMAGENAME=${{ inputs.imagename }}
-          VERSION=${{ inputs.version }}
           docker buildx build --platform $PLATFORMS --output "type=image,push=true" . --tag ${IMAGENAME}-${VERSION}
       -
         name: Inspect image
         if: always() && github.event_name != 'pull_request'
         run: |
-          IMAGENAME=${{ inputs.imagename }}
-          VERSION=${{ inputs.version }}
           docker buildx imagetools inspect ${IMAGENAME}-${VERSION}
