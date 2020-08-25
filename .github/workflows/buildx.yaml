@@ -27,8 +27,7 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v2
 
-      - name:Read buildinfo.json
-        id: read_buildinfo
+      - id: read_buildinfo
         run: |
           content=`cat ./buildinfo.json`
           # the following lines are required for multi line json
