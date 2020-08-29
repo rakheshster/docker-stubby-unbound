@@ -1,17 +1,5 @@
 # Stubby + Unbound + Docker
-## First things first
-It is best to target a specific release when pulling this repo. Either switch to the correct tag after downloading, or download a zip of the latest release from the [Releases](https://github.com/rakheshster/docker-stubby-unbound/releases) page. 
-
-We are currently at v0.2.1 and contain the following:
-  * Alpine 3.12 & s6-overlay 2.0.0.1 (via my [alpine-s6](https://hub.docker.com/repository/docker/rakheshster/alpine-s6) image)
-  * Stubby 0.3.0 & GetDNS 1.6.0
-  * Unbound 1.11.0
-
-I had a v0.1 pushed to GitHub before I started thinking about how to properly version these. In the vein of [Semantic Versioning](https://semver.org) the version numbers starting with v0.2.0 of this image is in a MAJOR.MINOR.PATCH format and currently at the number above. 
-
-  * I will update PATCH when I make any changes to the Dockerfile or config files etc. These will be minor behind the scene changes introduced by me. 
-  * I will update MINOR in case of any minor updates to any of the software above. For example: Stubby 0.3.1 will be a minor update. 
-  * And I will update MAJOR in case of major updates to any of the software above. For example: Unbound 1.12 or Alpine 3.xx would be a major update. 
+![Buildx & Push to DockerHub](https://github.com/rakheshster/docker-stubby-unbound/workflows/Buildx%20&%20Push%20to%20DockerHub/badge.svg)
 
 ## What is this?
 This is a Docker image containing Stubby and Unbound. 
@@ -32,6 +20,18 @@ From the [DNS Privacy Project](https://dnsprivacy.org/wiki/display/DP/About+Stub
 It is possible to combine both together though - i.e. use Unbound as your DNS resolver, forwarding to Stubby running on a different port that does the actual DNS resolution using DNS-over-TLS. A sample config for this scenario can be found on [this page](https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Clients#DNSPrivacyClients-Unbound/Stubbycombination). 
 
 This Stubby + Unbound Docker image packages the two together. It sets up Stubby listening on port 8053 with Unbound listening on port 53 and forwarding to Stubby port 8053.  
+
+## Getting this
+It is best to target a specific release when pulling this repo. Either switch to the correct tag after downloading, or download a zip of the latest release from the [Releases](https://github.com/rakheshster/docker-stubby-unbound/releases) page. 
+
+We are currently at "0.3.0-1.11.0-1" and contain the following:
+  * Alpine 3.12 & s6-overlay 2.0.0.1 (via my [alpine-s6](https://hub.docker.com/repository/docker/rakheshster/alpine-s6) image)
+  * Stubby 0.3.0 & GetDNS 1.6.0
+  * Unbound 1.11.0
+
+I had a v0.1 pushed to GitHub before I started thinking about how to properly version these. Then I thought I'd do [Semantic Versioning](https://semver.org) and started doing version numbers starting with v0.2.0 of this image in a MAJOR.MINOR.PATCH format. Later I decided to make the version more explicit about the version of software it contains. Hence I will switch to version numbers of format `<stubby version>-<unbound version>-<patch>` where `<patch>` will be increments due to changes introduced by me (maybe a change to the Dockerfile or underlying Alpine/ s6 base). 
+
+You can download this from Docker Hub as [rakheshster/stubby-unbound:version](https://hub.docker.com/repository/docker/rakheshster/stubby-unbound). 
 
 ## s6-overlay
 I also took the opportunity to setup an [s6-overlay](https://github.com/just-containers/s6-overlay). I like their philosophy of a Docker container being “one thing” rather than “one process per container”. This is why I chose to create one image for both Stubby & Docker instead of separate images. It was surprisingly easy to setup. 
