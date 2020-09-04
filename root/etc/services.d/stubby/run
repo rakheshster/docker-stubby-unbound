@@ -2,4 +2,4 @@
 
 s6-setuidgid stubby
 
-/bin/stubby -C /etc/stubby/stubby.yml
+/bin/stubby -C /etc/stubby/stubby.yml -v 4
