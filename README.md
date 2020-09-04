@@ -24,7 +24,7 @@ This Stubby + Unbound Docker image packages the two together. It sets up Stubby 
 ## Getting this
 It is best to target a specific release when pulling this repo. Either switch to the correct tag after downloading, or download a zip of the latest release from the [Releases](https://github.com/rakheshster/docker-stubby-unbound/releases) page. 
 
-We are currently at "0.3.0-1.11.0-1" and contain the following:
+We are currently at "0.3.0-1.11.0-3" and contain the following:
   * Alpine 3.12 & s6-overlay 2.0.0.1 (via my [alpine-s6](https://hub.docker.com/repository/docker/rakheshster/alpine-s6) image)
   * Stubby 0.3.0 & GetDNS 1.6.0
   * Unbound 1.11.0
