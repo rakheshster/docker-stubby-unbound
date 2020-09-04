@@ -71,7 +71,7 @@ FROM mybase AS alpineruntime
 # stubby (found via running it): yaml libidn2
 RUN apk add --update --no-cache ca-certificates tzdata \
     yaml libidn2 \
-    drill
+    drill nano
 RUN rm -rf /var/cache/apk/*
 
 # Copy the Stubby & Unbound items from the previous builds into this
