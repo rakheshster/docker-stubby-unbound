@@ -36,6 +36,7 @@ fi
 if [[ -z "$3" ]]; then
     docker create --name "$NAME" \
         -P --network="$NETWORK" \
+        -e TZ="Europe/London" \
         --restart=unless-stopped \
         --mount type=volume,source=$UNBOUND_DATA,target=/etc/unbound.d \
         --mount type=volume,source=$STUBBY_DATA,target=/etc/stubby \
@@ -45,6 +46,7 @@ else
     docker create --name "$NAME" \
         --ip="$IP" -P \
         --network="$NETWORK" \
+        -e TZ="Europe/London" \
         --restart=unless-stopped \
         --mount type=volume,source=$UNBOUND_DATA,target=/etc/unbound.d \
         --mount type=volume,source=$STUBBY_DATA,target=/etc/stubby \

@@ -69,7 +69,7 @@ FROM mybase AS alpineruntime
 
 # Get the runtimes deps for all
 # stubby (found via running it): yaml libidn2
-RUN apk add --update --no-cache ca-certificates \
+RUN apk add --update --no-cache ca-certificates tzdata \
     yaml libidn2 \
     drill
 RUN rm -rf /var/cache/apk/*
