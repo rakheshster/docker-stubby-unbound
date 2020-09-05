@@ -68,9 +68,9 @@ RUN make && DESTDIR=/usr/local make install
 FROM mybase AS alpineruntime
 
 # Get the runtimes deps for all
-# stubby (found via running it): yaml libidn2
+# stubby (found via running it): yaml libidn2 openssl (not required but I am adding it for troubleshooting)
 RUN apk add --update --no-cache ca-certificates tzdata \
-    yaml libidn2 \
+    yaml libidn2 openssl \
     drill nano
 RUN rm -rf /var/cache/apk/*
 
