@@ -87,11 +87,11 @@ When the image is built the `stubby` folder is copied into it as `/etc/stubby`, 
 You can edit the config file or copy from outside the container using similar commands as above. 
 
 ## Building & Running
-The quickest way to get started after cloning/ downloading this repo is to use the `./buildlocal.sh` file. It takes a single optional argument - the name you want to give the image (defaults to `rakheshster/stubby-unbound`).
+The quickest way to get started after cloning/ downloading this repo is to use the `./scripts/buildlocal.sh` file. It takes the name and tag to assign the image from the `buildinfo.json` file.
 
-NOTE: the script is optional. You can build this via `docker build` too. And additional script `./buildandpush.sh` is what I use to create multi-arch images and push to Docker Hub. It too is optional. 
+NOTE: the script is optional. You can build this via `docker build` too. And additional script `./.scripts/buildxandpush.sh` is what I use to create multi-arch images and push to Docker Hub. It too is optional. 
 
-After the image is built you can run it manually via `docker run` or you use the `./createcontainer.sh` script which takes the image name and container name as mandatory parameters and optionally the IP address and network of the container. I tend to use a macvlan network to run this so the container has its own IP address on my network. 
+After the image is built you can run it manually via `docker run` or you use the `./.scripts/createcontainer.sh` script which takes the image name and container name as mandatory parameters and optionally the IP address and network of the container. I tend to use a macvlan network to run this so the container has its own IP address on my network. 
 
 ### Systemd integration
 The `./createcontainer.sh` script doesn’t run the container. It creates the container and also creates a systemd service unit file along with some instructions on what to do with it. This way you have systemd managing the container so it always starts after a system reboot. The unit file and systemd integration is optional of course; I wanted the container to always start after a reboot as it provides DNS for my home lab and is critical, that’s why I went through this extra effort. 
