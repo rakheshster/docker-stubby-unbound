@@ -33,7 +33,7 @@ RUN rm -rf /var/cache/apk/*
 ADD https://nlnetlabs.nl/downloads/unbound/unbound-${UNBOUND_VERSION}.tar.gz /tmp/
 ADD https://www.nlnetlabs.nl/downloads/unbound/unbound-${UNBOUND_VERSION}.tar.gz.asc /tmp/
 # Import NLNetLabs's key (W.C.A. Wijngaards <wouter@nlnetlabs.nl>)
-RUN wget -qO - 'https://keys.openpgp.org/pks/lookup?op=get&search=0x9F6F1C2D7E045F8D' | gpg --import
+RUN gpg --recv-keys 0x9F6F1C2D7E045F8D
 # Verify the download (exit if it fails)
 RUN gpg --status-fd 1 --verify /tmp/unbound-${UNBOUND_VERSION}.tar.gz.asc /tmp/unbound-${UNBOUND_VERSION}.tar.gz 2>/dev/null | grep -q "GOODSIG 9F6F1C2D7E045F8D" \
     || exit 1
@@ -55,7 +55,7 @@ RUN make && DESTDIR=/usr/local make install
 ADD https://getdnsapi.net/dist/getdns-${GETDNS_VERSION}.tar.gz /tmp/
 ADD https://getdnsapi.net/dist/getdns-${GETDNS_VERSION}.tar.gz.asc /tmp/
 # Import GetDNS's key (Willem Toorop <willem@nlnetlabs.nl>)
-RUN wget -qO - 'https://keys.openpgp.org/pks/lookup?op=get&search=0xE5F8F8212F77A498' | gpg --import
+RUN gpg --recv-keys 0xE5F8F8212F77A498
 # Verify the download (exit if it fails)
 RUN gpg --status-fd 1 --verify /tmp/getdns-${GETDNS_VERSION}.tar.gz.asc /tmp/getdns-${GETDNS_VERSION}.tar.gz 2>/dev/null | grep -q "GOODSIG E5F8F8212F77A498" \
     || exit 1
