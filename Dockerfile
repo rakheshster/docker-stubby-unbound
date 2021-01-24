@@ -82,12 +82,13 @@ RUN apk add --update --no-cache ca-certificates tzdata \
     drill nano
 RUN rm -rf /var/cache/apk/*
 
-# Copy the Stubby & Unbound items from the previous builds into this
+# Copy the Stubby & Unbound files from the previous builds into this
 # /usr/local/bin -> /bin etc.
 COPY --from=builder1 /usr/local/ /
 # Copy the config files & s6 service files to the correct location
-
 COPY root/ /
+
+# Get root hints for Unbound
 ADD https://www.internic.net/domain/named.cache /etc/unbound/root.hints
 
 # addgroup / adduser -S creates a system group / user; the -D means don't assign a password

@@ -94,7 +94,7 @@ NOTE: the script is optional. You can build this via `docker build` too. And add
 After the image is built you can run it manually via `docker run` or you use the `./.scripts/createcontainer.sh` script which takes the image name and container name as mandatory parameters and optionally the IP address and network of the container. I tend to use a macvlan network to run this so the container has its own IP address on my network. 
 
 ### Systemd integration
-The `./createcontainer.sh` script doesn’t run the container. It creates the container and also creates a systemd service unit file along with some instructions on what to do with it. This way you have systemd managing the container so it always starts after a system reboot. The unit file and systemd integration is optional of course; I wanted the container to always start after a reboot as it provides DNS for my home lab and is critical, that’s why I went through this extra effort. 
+The `./.scripts/createcontainer.sh` script doesn’t run the container. It creates the container and also creates a systemd service unit file along with some instructions on what to do with it. This way you have systemd managing the container so it always starts after a system reboot. The unit file and systemd integration is optional of course; I wanted the container to always start after a reboot as it provides DNS for my home lab and is critical, that’s why I went through this extra effort. 
 
 Note: The service unit file is set to only restart if the service is aborted. This is intentional in case you want to `docker stop` the container sometime. 
 
