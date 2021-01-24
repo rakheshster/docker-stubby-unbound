@@ -99,6 +99,6 @@ The `./createcontainer.sh` script doesn’t run the container. It creates the co
 Note: The service unit file is set to only restart if the service is aborted. This is intentional in case you want to `docker stop` the container sometime. 
 
 ## Notes
-This is my first Docker image. 
+This was my first Docker image. 
 
 Thanks to [GitHub - MatthewVance/stubby-docker: Gain the full power of DNS-over-TLS forwarding by combining Stubby with Unbound](https://github.com/MatthewVance/stubby-docker) and [GitHub - treibholz/docker-stubby: minimal alpine-linux based stubby](https://github.com/treibholz/docker-stubby) which I referred to extensively to pick up Docker as I went along. Any mistakes or inefficiencies in this Docker image are all mine. 
