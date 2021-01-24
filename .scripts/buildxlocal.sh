@@ -15,7 +15,7 @@ if ! command -v jq &> /dev/null; then echo "Cannot find jq. Exiting ..."; exit 1
 VERSION=$(jq -r '.version' $BUILDINFO)
 IMAGENAME=$(jq -r '.imagename' $BUILDINFO)
 
-docker buildx build --platform $ARCH -t ${IMAGENAME}:${VERSION} -t ${IMAGENAME}:latest --progress=plain .
+docker buildx build --platform $ARCH -t ${IMAGENAME}:${VERSION} -t ${IMAGENAME}:latest --progress=plain $(pwd)
 
 echo ""
 echo "Loading the image of the current architecture (this could fail if I didn't specify it in the ARCH variable earlier)"
