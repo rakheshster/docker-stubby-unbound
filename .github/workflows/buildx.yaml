@@ -1,5 +1,5 @@
 # This is the name of the workflow
-name: Buildx & Push to DockerHub
+name: Docker Build & Push
 
 # When it runs
 on:
@@ -18,8 +18,8 @@ on:
 
 # And what jobs it has
 jobs:
-  # Just one job here ... imaginatively called "buildx" (that's its id at least, it doesn't have a name coz I couldn't think of something)
-  buildx:
+  # Just one job here ... imaginatively called "Build" (that's its id at least, it doesn't have a name coz I couldn't think of something)
+  Build:
    # this job runs on Ubuntu
     runs-on: ubuntu-latest
     # these are its environment variables
@@ -88,16 +88,20 @@ jobs:
 
       - name: Build and push
         uses: docker/build-push-action@v2
+        env:
+          # read these variables from the JSON file I inputted in an earlier step and define for use in this step
+          IMAGENAME: ${{ fromJson(steps.read_buildinfo.outputs.packageJson).imagename }}
+          VERSION: ${{ fromJson(steps.read_buildinfo.outputs.packageJson).version  }}
         with:
           context: .
           file: ./Dockerfile
-          platforms: ${PLATFORMS}
+          platforms: ${{ env.PLATFORMS }}
           push: true
           tags: |
-            ${IMAGENAME}:${VERSION}
-            ${IMAGENAME}:latest
-            ghcr.io/${IMAGENAME}:${VERSION}
-            ghcr.io/${IMAGENAME}:latest
+            ${{ env.IMAGENAME }}:${{ env.VERSION }}
+            ${{ env.IMAGENAME }}:latest
+            ghcr.io/${{ env.IMAGENAME }}:${{ env.VERSION }}
+            ghcr.io/${{ env.IMAGENAME }}:latest
 
       # commenting this as out as I now build and push using an action.
       # - name: Docker Buildx (push)
