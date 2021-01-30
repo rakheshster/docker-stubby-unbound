@@ -74,6 +74,7 @@ FROM mybase AS finalstage
 
 LABEL stage="finalstage"
 LABEL maintainer="Rakhesh Sasidharan"
+LABEL org.opencontainers.image.source=https://github.com/rakheshster/docker-stubby-unbound
 
 # Get the runtimes deps for all
 # stubby (found via running it): yaml libidn2 openssl (not required but I am adding it for troubleshooting)
