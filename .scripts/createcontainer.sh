@@ -64,18 +64,18 @@ printf "\nTo start the container do: \n\tdocker start $NAME"
 
 printf "\n\nCreating ./${NAME}.service for systemd"
 cat <<EOF > $NAME.service
-    [Unit]
-    Description=Stubby Unbound Container
-    Requires=docker.service
-    After=docker.service
+[Unit]
+Description=Stubby Unbound Container
+Requires=docker.service
+After=docker.service
 
-    [Service]
-    Restart=on-abort
-    ExecStart=/usr/bin/docker start -a $NAME
-    ExecStop=/usr/bin/docker stop -t 2 $NAME
+[Service]
+Restart=on-abort
+ExecStart=/usr/bin/docker start -a $NAME
+ExecStop=/usr/bin/docker stop -t 2 $NAME
 
-    [Install]
-    WantedBy=local.target
+[Install]
+WantedBy=local.target
 EOF
 
 printf "\n\nDo the following to install this in systemd & enable:"
