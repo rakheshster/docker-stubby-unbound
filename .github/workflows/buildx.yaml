@@ -54,7 +54,7 @@ jobs:
 
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v1.3.0
 
       # this is how things used to be prior to this action being officially incorporated into Docker
       # - name: Set up Docker Buildx
