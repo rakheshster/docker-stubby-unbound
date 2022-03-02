@@ -34,7 +34,7 @@ jobs:
     steps:
         # Checkout the code from GitHib
       - name: Checkout the code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
         # Read my JSON file via a simple cat, then output it as the output of this step (which I can then refer to via its id "read_buildinfo") 
       - id: read_buildinfo
